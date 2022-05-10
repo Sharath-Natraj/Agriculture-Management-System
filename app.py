@@ -5,7 +5,7 @@ import ast
 import pickle
 import joblib
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hello'
+app.config['SECRET_KEY'] = 'hel'
 
 
 def predict_production(data):
