@@ -1,14 +1,16 @@
 
 # import required modules
-from selenium import webdriver
-import requests
 from datetime import datetime
 
 
-def open_chrome():
-    drive = webdriver.Chrome("/home/amogha/Downloads/chromedriver")
-    drive.get("https://www.cactus2000.de/uk/unit/masshum.shtml")
-    return drive
+from selenium import webdriver
+import requests
+
+# def open_chrome():
+#     drive = webdriver.Chrome("/home/amogha/Downloads/chromedriver")
+#     drive.get("https://www.cactus2000.de/uk/unit/masshum.shtml")
+#     return drive
+
 
 def convert2h(temperature,percentage,pressure,drive):
 
@@ -34,7 +36,40 @@ def convert2h(temperature,percentage,pressure,drive):
     ans = hum.get_attribute("value")
     reset = drive.find_element_by_xpath("//input[@type='reset']")
     reset.click()
-    return ans
+
+    a0w=6.107799961
+    a1w= 4.436518521*(10**(-1))
+    a2w=1.428945805*(10**(-2))
+    a3w=2.650648471*(10**(-4))
+    a4w=3.031240396*(10**(-6))
+    a5w=2.034080948*(10**(-8)) 
+    a6w=6.136820929*(10**(-11))
+
+    a0i=6.109177956
+    a1i=5.034698970*(10**(-1))
+    a2i=1.886013408*(10**(-2))
+    a3i=4.176223716*(10**(-4))
+    a4i=5.824720280*(10**(-6))
+    a5i=4.838803174*(10**(-8)) 
+    a6i=1.838826904*(10**(-10))
+
+    ew=a0w+temp-(a1w+temp*(a2w+temp*(a3w+temp*(a4w+temp*(a5w+temp*a6w)))))
+    ei=a0i+temp-(a1i+temp*(a2i+temp*(a3i+temp*(a4i+temp*(a5i+temp*a6i)))))
+
+    e=min(ew,ei)
+
+    Ph20= ans*e*temp*0.01
+    Pair=1013.25
+
+    Xh20=Ph20/pres
+
+    q=(Xh20*18.01534)/((Xh20*18.01534)+((1-Xh20)*28.9644))
+
+    return q*1000
+
+
+   # return ans
+    # RH
 
 
 def call_an_api():
