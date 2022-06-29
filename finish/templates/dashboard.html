@@ -8,8 +8,22 @@ Dashboard
 {{super()}}
 <link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
 {% endblock %}
-
+ 
 {% block content %}
+  <div class="">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                <center>{{ message }}</center>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+      </div>
+
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -23,6 +37,7 @@ Dashboard
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ url_for('graph')}}"> graph </a></li>
             <li><a href="#">Dashboard</a></li>
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
           </ul>
@@ -37,4 +52,40 @@ Dashboard
         </div>
       </div>
     </div>
+
+    <div class="container">
+    <form method="POST" action="">
+
+        <div class="form-group">
+          <label >Enter RTC Number </label>
+          <input type="text" class="form-control" placeholder="Enter RTC number" name="rtc">
+        </div>
+      <button type = "submit" class="btn btn-primary">Submit</button>
+    </form>
+    </div>
+    <hr>
+    {% if res %}
+    <div class="container">
+    <h3> Previously entered crops value , Enter this below ! of this rtc no - {{res[0].rtc}}</h3>
+      <form method="POST" action="{{ url_for('previous_crop') }}">
+        <div class="form-group">
+        {% for i in res %}
+
+          <label >Enter the value of {{i.crop}}</label>
+          <input type="number" class="form-control" placeholder="Enter production value" name={{i.crop}}>
+        {% endfor %}
+        </div>
+        <button type = "submit" class="btn btn-primary">Submit</button>
+      </form>
+
+    </div>
+    {% endif %}
+    <hr>
+    <div class="container">
+    {% if predict %}
+            <a href="{{ url_for('predict_data') }}" class="btn btn-primary btn-lg active" role="button">predict here </a>
+    </div>
+    {% endif %}
+
+
 {% endblock %}
