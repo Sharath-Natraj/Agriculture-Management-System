@@ -6,33 +6,39 @@ from datetime import datetime
 
 
 def open_chrome():
-    drive = webdriver.Chrome("/home/amogha/Downloads/chromedriver")
+    drive = webdriver.Chrome("C://Users/User/Desktop/sample/building_user_login_system/finish/chromedriver")
     drive.get("https://www.cactus2000.de/uk/unit/masshum.shtml")
     return drive
 
 def convert2h(temperature,percentage,pressure,drive):
 
-    temp = drive.find_element_by_name("temp")
+    # temp = drive.find_element_by_name("temp")
+    temp = drive.find_element("name", "temp")
     temp.clear()
     temp.send_keys(temperature)
 
-    pres = drive.find_element_by_name("pres")
+    # pres = drive.find_element_by_name("pres")
+    pres = drive.find_element("name", "pres")
     pres.clear()
     pres.send_keys(pressure)
 
-    prec = drive.find_element_by_name("rh_H2O")
+    # prec = drive.find_element_by_name("rh_H2O")
+    prec = drive.find_element("name", "rh_H2O")
     # prec.clear()
     prec.send_keys(percentage)
     # print(percentage)
     # time.sleep(8)
-    but = drive.find_element_by_xpath("//input[@type='button']")
+    but = drive.find_element("xpath", "//input[@type='button']")
+    # but = drive.find_element_by_xpath("//input[@type='button']")
     but.click()
     # import time
     # time.sleep(1)
-    hum = drive.find_element_by_name("spc_H2O")
+    # hum = drive.find_element_by_name("spc_H2O")
+    hum = drive.find_element("name", "spc_H2O")
     # print()
     ans = hum.get_attribute("value")
-    reset = drive.find_element_by_xpath("//input[@type='reset']")
+    prec = drive.find_element("xpath", "//input[@type='reset']")
+    # reset = drive.find_element_by_xpath("//input[@type='reset']")
     reset.click()
     return ans
 
